@@ -126,68 +126,89 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // FORMULARIO DE CALIFICACIÓN
 
-    const formularioCalificacion =
-        document.getElementById("formCalificacion");
 
-    if (formularioCalificacion) {
+const formularioCalificacion =
+    document.getElementById("formCalificacion");
 
-        formularioCalificacion.addEventListener("submit", function (event) {
+if (formularioCalificacion) {
 
-            event.preventDefault();
+    formularioCalificacion.addEventListener("submit", function (event) {
 
-            const calificacion =
-                document.getElementById("calificacion").value;
+        event.preventDefault();
 
-            const error =
-                document.getElementById("mensajeError");
+        const calificacion =
+            document.getElementById("calificacion").value;
 
-            const exito =
-                document.getElementById("mensajeExito");
+        const comentarios =
+            document.getElementById("comentarios").value.trim();
 
-            ocultarAlerta(error);
-            ocultarAlerta(exito);
+        const error =
+            document.getElementById("mensajeError");
 
-            if (!calificacion) {
+        const exito =
+            document.getElementById("mensajeExito");
 
-                mostrarAlerta(
-                    error,
-                    "Selecciona una calificación antes de continuar."
-                );
+        ocultarAlerta(error);
+        ocultarAlerta(exito);
 
-                return;
-
-            }
-
-            localStorage.setItem("calificacion", calificacion);
+        if (!calificacion || !comentarios) {
 
             mostrarAlerta(
-                exito,
-                "¡Gracias por evaluar nuestro proyecto!"
+                error,
+                "Completa todos los campos antes de enviar."
             );
 
-            setTimeout(function () {
+            return;
 
-                window.location.href = "calificacion.html";
+        }
 
-            }, 1500);
+        const evaluacion = {
+            calificacion: calificacion,
+            comentarios: comentarios
+        };
 
-        });
+        localStorage.setItem(
+            "evaluacionProyecto",
+            JSON.stringify(evaluacion)
+        );
 
-    }
+        mostrarAlerta(
+            exito,
+            "¡Gracias! Tu evaluación se registró correctamente."
+        );
+
+        setTimeout(function () {
+
+            window.location.href = "calificacion.html";
+
+        }, 1500);
+
+    });
+
+}
 
 
-    // MOSTRAR CALIFICACIÓN FINAL
+// MOSTRAR CALIFICACIÓN FINAL
 
-    const resultadoCalificacion =
-        document.getElementById("resultadoCalificacion");
+const resultadoCalificacion =
+    document.getElementById("resultadoCalificacion");
 
-    if (resultadoCalificacion) {
+if (resultadoCalificacion) {
 
-        const calificacion = localStorage.getItem("calificacion");
+    const evaluacionGuardada =
+        localStorage.getItem("evaluacionProyecto");
 
-        resultadoCalificacion.textContent = calificacion
-            ? calificacion + " / 10"
-            : "Gracias por visitar nuestro proyecto.";
+    if (evaluacionGuardada) {
+
+        const evaluacion = JSON.parse(evaluacionGuardada);
+
+        resultadoCalificacion.textContent =
+            evaluacion.calificacion + " / 10";
+
+    } else {
+
+        resultadoCalificacion.textContent =
+            "Gracias por visitar nuestro proyecto.";
 
     }
 
