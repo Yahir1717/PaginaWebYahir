@@ -177,6 +177,8 @@ if (formularioCalificacion) {
             "¡Gracias! Tu evaluación se registró correctamente."
         );
 
+        alert("¡Gracias por calificar nuestro proyecto!");
+        
         setTimeout(function () {
 
             window.location.href = "calificacion.html";
